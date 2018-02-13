@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27130.2026
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EDennis.EFBase", "EDennis.EFBase\EDennis.EFBase.csproj", "{F04A05D5-EA8B-4029-8B5C-9F6F96123805}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EDennis.EFBase.Tests", "EDennis.EFBase.Tests\EDennis.EFBase.Tests.csproj", "{305D8EF8-7E68-4FB6-B31B-821720CF68B1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F04A05D5-EA8B-4029-8B5C-9F6F96123805}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F04A05D5-EA8B-4029-8B5C-9F6F96123805}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F04A05D5-EA8B-4029-8B5C-9F6F96123805}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F04A05D5-EA8B-4029-8B5C-9F6F96123805}.Release|Any CPU.Build.0 = Release|Any CPU
+		{305D8EF8-7E68-4FB6-B31B-821720CF68B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{305D8EF8-7E68-4FB6-B31B-821720CF68B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{305D8EF8-7E68-4FB6-B31B-821720CF68B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{305D8EF8-7E68-4FB6-B31B-821720CF68B1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {BFC67E53-9982-47FA-9BE2-A7ABC08B282C}
+	EndGlobalSection
+EndGlobal

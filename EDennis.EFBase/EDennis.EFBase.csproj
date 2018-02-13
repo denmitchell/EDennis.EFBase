@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <Version>0.0.4-alpha</Version>
+    <Description>Provides a BaseRepo and BaseContext for Entity Framework targeting SQL Server.  BaseRepo class includes CRUD methods, as well as a method for returning JSON from a FOR JSON SQL Server SELECT statement.</Description>
+    <PackageReleaseNotes>This is an alpha version.  Not to be used in production.</PackageReleaseNotes>
+    <PackageTags>Base Repository, Entity Framework, FOR JSON, SQL Server</PackageTags>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.5" />
+    <PackageReference Include="Microsoft.SqlServer.SqlManagementObjects" Version="140.17218.0" />
+  </ItemGroup>
+  
+</Project>
