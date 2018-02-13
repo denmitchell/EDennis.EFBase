@@ -1,0 +1,7 @@
+# EFBase Wiki
+The EFBase package provides a BaseRepo and BaseContext for Entity Framework targeting SQL Server.  The BaseRepo class includes methods for creating, reading (by PK), updating, and deleting -- both synchronously and asynchronously.  The BaseRepo also includes methods for returning JSON from a valid FOR JSON SQL Server SELECT statement.  To use BaseRepo, be sure to extend both BaseRepo (for all of your repository classes) and BaseContext (for all of your DbContext subclasses).  The following classes are included:
+1. **[BaseContext](https://github.com/denmitchell/efbase/wiki/BaseContext)** -- which extends DbContext to provide support for FOR JSON queries.
+2. **[BaseRepo](https://github.com/denmitchell/efbase/wiki/BaseRepo)** -- which provides the base repository class.
+3. **[SequenceResetter](https://github.com/denmitchell/efbase/wiki/SequenceResetter)**-- which provides a method for resetting all sequences in a database.
+4. **[SqlExecutor](https://github.com/denmitchell/efbase/wiki/SqlExecutor)** -- which provides methods for executing multiple SQL statement blocks separated by GO.
+5. **[SqlJson](https://github.com/denmitchell/efbase/wiki/SqlJson)** -- which allows Entity Framework to return FOR JSON statements from SQL Server.

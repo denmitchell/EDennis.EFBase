@@ -6,8 +6,18 @@ using System.Text;
 using System.Text.RegularExpressions;
 
 namespace EDennis.EFBase {
+
+    /// <summary>
+    /// Provides a means of executing SQL Server SQL statements separated by 
+    /// GO blocks
+    /// </summary>
     public class SqlExecutor {
 
+        /// <summary>
+        /// Executes SQL using the provided connection string
+        /// </summary>
+        /// <param name="connectionString">Valid connection string</param>
+        /// <param name="sql">One or more SQL statements</param>
         public static void Execute(string connectionString, string sql) {
 
             var pattern = @"^\W*go\W*;?\W*$";
@@ -21,6 +31,11 @@ namespace EDennis.EFBase {
 
         }
 
+        /// <summary>
+        /// Executes SQL using the provided DbContext
+        /// </summary>
+        /// <param name="context">Valid DbContext</param>
+        /// <param name="sql">One or more SQL statements</param>
         public static void Execute(DbContext context, string sql) {
 
             var pattern = @"^\W*go\W*;?\W*$";
@@ -34,6 +49,12 @@ namespace EDennis.EFBase {
         }
 
 
+        /// <summary>
+        /// Executes one or more SQL Statements
+        /// </summary>
+        /// <param name="statements">An array of statements</param>
+        /// <param name="masterConnection">Connection string for master database</param>
+        /// <param name="dbConnection">Connection string for target database</param>
         private static void ExecuteStatement(string[] statements, 
                 string masterConnection, string dbConnection) {
             foreach (var s in statements) {

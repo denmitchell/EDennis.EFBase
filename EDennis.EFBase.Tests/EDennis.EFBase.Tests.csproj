@@ -16,10 +16,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="EntityFrameworkTransactionsPractice.Tests.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\EDennis.EFBase\EDennis.EFBase.csproj" />
   </ItemGroup>
 

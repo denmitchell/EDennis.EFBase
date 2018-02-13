@@ -7,8 +7,23 @@ using Microsoft.SqlServer.Management.Smo;
 using System.Data.SqlClient;
 
 namespace EDennis.EFBase {
+
+    /// <summary>
+    /// Provides a means of resetting SQL Server sequences
+    /// to valid values.
+    /// </summary>
     public class SequenceResetter {
 
+        /// <summary>
+        /// Resets all sequence values in a database.  The
+        /// method uses the INFORMATION_SCHEMA schema to
+        /// identify all sequences.  These sequences are
+        /// reset to 1 plus the maximum value of the 
+        /// column that uses the sequence's next value as
+        /// a default.  Note: This method may fail if
+        /// the same sequence is used for multiple tables.
+        /// </summary>
+        /// <param name="context">Valid db context</param>
         public static void ResetAllSequences(DbContext context) {
             SqlExecutor.Execute(context, sql);
         }

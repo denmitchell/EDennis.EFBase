@@ -5,7 +5,12 @@ VisualStudioVersion = 15.0.27130.2026
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EDennis.EFBase", "EDennis.EFBase\EDennis.EFBase.csproj", "{F04A05D5-EA8B-4029-8B5C-9F6F96123805}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EDennis.EFBase.Tests", "EDennis.EFBase.Tests\EDennis.EFBase.Tests.csproj", "{305D8EF8-7E68-4FB6-B31B-821720CF68B1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EDennis.EFBase.Tests", "EDennis.EFBase.Tests\EDennis.EFBase.Tests.csproj", "{305D8EF8-7E68-4FB6-B31B-821720CF68B1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{72D995F0-8AC6-4453-AF09-47311A2F181C}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
