@@ -1,13 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
 using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace EDennis.EFBase {
@@ -37,23 +32,13 @@ namespace EDennis.EFBase {
     /// during unit testing by using one of the overloaded constructors
     /// </summary>
     /// <typeparam name="TEntity">The name of the entity</typeparam>
-    public class BaseRepo<TEntity> : IBaseRepo<TEntity>, IDisposable
+    public class SqlServerRepo<TEntity> : IBaseRepo<TEntity>, IDisposable
                 where TEntity : class, new() {
 
-        protected BaseContext _context;
+        protected SqlServerContext _context;
         protected DbSet<TEntity> _dbset;
         protected IDbContextTransaction _trans;
         protected bool _autoRollback;
-
-        /// <summary>
-        /// Constructs a new BaseRepo with the provided BaseContext
-        /// </summary>
-        /// <param name="context">DbContext subclass that includes
-        /// a DbSet for pure JSON results</param>
-        public BaseRepo(BaseContext context) {
-            _context = context;
-            _dbset = _context.Set<TEntity>();
-        }
 
         /// <summary>
         /// Constructs a new BaseRepo object for use in testing.
@@ -62,7 +47,7 @@ namespace EDennis.EFBase {
         /// a DbSet for pure JSON results</param>
         /// <param name="autoRollback">specify as true to include
         /// autoRollback</param>
-        public BaseRepo(BaseContext context, bool autoRollback) {
+        public SqlServerRepo(SqlServerContext context, bool autoRollback = false) {
             _context = context;
             _dbset = _context.Set<TEntity>();
 

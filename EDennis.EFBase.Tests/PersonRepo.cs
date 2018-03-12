@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Text;
@@ -9,11 +10,11 @@ using System.Data;
 
 namespace EDennis.EFBase.Tests {
 
-    public class PersonRepo : BaseRepo<Person> {
+    public class PersonRepo : SqlServerRepo<Person> {
 
 
-        public PersonRepo(PersonContext context) :
-            base(context, true){ }
+        public PersonRepo(PersonContext context, bool autoRollback = false) :
+            base(context, autoRollback){}
 
 
         public void ThrowException() {

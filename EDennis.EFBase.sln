@@ -12,6 +12,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EFBase.ConsoleTests", "EFBase.ConsoleTests\EFBase.ConsoleTests.csproj", "{F7575FE6-8369-4865-B0C7-5414D9888C05}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -26,6 +28,10 @@ Global
 		{305D8EF8-7E68-4FB6-B31B-821720CF68B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{305D8EF8-7E68-4FB6-B31B-821720CF68B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{305D8EF8-7E68-4FB6-B31B-821720CF68B1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F7575FE6-8369-4865-B0C7-5414D9888C05}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F7575FE6-8369-4865-B0C7-5414D9888C05}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F7575FE6-8369-4865-B0C7-5414D9888C05}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F7575FE6-8369-4865-B0C7-5414D9888C05}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

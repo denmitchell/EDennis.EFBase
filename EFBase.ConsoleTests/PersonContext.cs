@@ -1,14 +1,12 @@
-﻿using System;
-using EDennis.MigrationsExtensions;
+﻿using EDennis.MigrationsExtensions;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace EDennis.EFBase.Tests {
+namespace EDennis.EFBase.ConsoleAppTest {
+
+
     public partial class PersonContext : SqlServerContext {
 
-
-        public virtual DbSet<Person> Person { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
             if (!optionsBuilder.IsConfigured) {
@@ -16,6 +14,9 @@ namespace EDennis.EFBase.Tests {
                 .ReplaceService<IMigrationsSqlGenerator, TemporalMigrationsSqlGenerator>();
             }
         }
+
+
+        public virtual DbSet<Person> Person { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder) {
@@ -44,5 +45,4 @@ namespace EDennis.EFBase.Tests {
 
         }
     }
-
 }

@@ -6,8 +6,11 @@
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
+
   <ItemGroup>
-    <PackageReference Include="EDennis.NetCoreTestingUtilities" Version="2.2.0" />
+    <PackageReference Include="EDennis.MigrationsExtensions" Version="1.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.5" />
+    <PackageReference Include="EDennis.NetCoreTestingUtilities" Version="2.3.5" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.5.0" />
     <PackageReference Include="Microsoft.SqlServer.SqlManagementObjects" Version="140.17218.0" />
     <PackageReference Include="xunit" Version="2.3.1" />
@@ -20,12 +23,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="create.sql">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="drop.sql">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Update="InsertAndDelete.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
