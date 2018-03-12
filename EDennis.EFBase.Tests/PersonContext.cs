@@ -1,7 +1,5 @@
-﻿using System;
-using EDennis.MigrationsExtensions;
+﻿using EDennis.MigrationsExtensions;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace EDennis.EFBase.Tests {
