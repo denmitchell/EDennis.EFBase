@@ -11,6 +11,20 @@ namespace EDennis.EFBase {
     /// </summary>
     public class SqlServerContext : DbContext {
 
+        /// <summary>
+        /// Constructor used by MVC, when options are passed in via Startup
+        /// </summary>
+        /// <param name="options">configuration options</param>
+        public SqlServerContext(DbContextOptions<DbContext> options) :
+            base(options) { }
+
+        /// <summary>
+        /// Default constructor.  Use this when configuring via 
+        /// OnConfiguring
+        /// </summary>
+        public SqlServerContext() { }
+
+
         //holds FOR JSON result sets
         public virtual DbSet<SqlJson> SqlJsonResult { get; set; }
 
