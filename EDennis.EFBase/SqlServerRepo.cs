@@ -65,7 +65,7 @@ namespace EDennis.EFBase {
         /// </summary>
         /// <param name="keyValues">primary key provided as key-value object array</param>
         /// <returns>Entity whose primary key matches the provided input</returns>
-        public TEntity GetById(params object[] keyValues) {
+        public virtual TEntity GetById(params object[] keyValues) {
             return _dbset.Find(keyValues);
         }
 
@@ -75,7 +75,7 @@ namespace EDennis.EFBase {
         /// </summary>
         /// <param name="keyValues">primary key provided as key-value object array</param>
         /// <returns>Entity whose primary key matches the provided input</returns>
-        public async Task<TEntity> GetByIdAsync(params object[] keyValues) {
+        public virtual async Task<TEntity> GetByIdAsync(params object[] keyValues) {
             return await _dbset.FindAsync(keyValues);
         }
 
@@ -85,7 +85,7 @@ namespace EDennis.EFBase {
         /// </summary>
         /// <param name="entity">The entity to create</param>
         /// <returns>The created entity</returns>
-        public TEntity Create(TEntity entity) {
+        public virtual TEntity Create(TEntity entity) {
             _dbset.Add(entity);
             _context.SaveChanges();
             return entity;
@@ -97,7 +97,7 @@ namespace EDennis.EFBase {
         /// </summary>
         /// <param name="entity">The entity to create</param>
         /// <returns>The created entity</returns>
-        public async Task<TEntity> CreateAsync(TEntity entity) {
+        public virtual async Task<TEntity> CreateAsync(TEntity entity) {
             _dbset.Add(entity);
             await _context.SaveChangesAsync();
             return entity;
@@ -109,7 +109,7 @@ namespace EDennis.EFBase {
         /// </summary>
         /// <param name="entity">The new data for the entity</param>
         /// <returns>The newly updated entity</returns>
-        public TEntity Update(TEntity entity) {
+        public virtual TEntity Update(TEntity entity) {
             _context.Attach(entity);
             _context.Entry(entity).State = EntityState.Modified;
             _context.SaveChanges();
@@ -123,7 +123,7 @@ namespace EDennis.EFBase {
         /// </summary>
         /// <param name="entity">The new data for the entity</param>
         /// <returns>The newly updated entity</returns>
-        public async Task<TEntity> UpdateAsync(TEntity entity) {
+        public virtual async Task<TEntity> UpdateAsync(TEntity entity) {
             _context.Attach(entity);
             _context.Entry(entity).State = EntityState.Modified;
             await _context.SaveChangesAsync();
@@ -135,7 +135,7 @@ namespace EDennis.EFBase {
         /// Deletes the provided entity
         /// </summary>
         /// <param name="entity">The entity to delete</param>
-        public void Delete(TEntity entity) {
+        public virtual void Delete(TEntity entity) {
             if (_context.Entry(entity).State == EntityState.Detached) {
                 _dbset.Attach(entity);
             }
@@ -147,7 +147,7 @@ namespace EDennis.EFBase {
         /// Asychronously deletes the provided entity
         /// </summary>
         /// <param name="entity">The entity to delete</param>
-        public async void DeleteAsync(TEntity entity) {
+        public virtual async void DeleteAsync(TEntity entity) {
             if (_context.Entry(entity).State == EntityState.Detached) {
                 _dbset.Attach(entity);
             }
@@ -159,7 +159,7 @@ namespace EDennis.EFBase {
         /// Deletes the entity whose primary keys match the provided input
         /// </summary>
         /// <param name="keyValues">The primary key as key-value object array</param>
-        public void Delete(params object[] keyValues) {
+        public virtual void Delete(params object[] keyValues) {
             TEntity entity = _dbset.Find(keyValues);
             Delete(entity);
         }
@@ -168,7 +168,7 @@ namespace EDennis.EFBase {
         /// Asynchrously deletes the entity whose primary keys match the provided input
         /// </summary>
         /// <param name="keyValues">The primary key as key-value object array</param>
-        public void DeleteAsync(params object[] keyValues) {
+        public virtual void DeleteAsync(params object[] keyValues) {
             TEntity entity = _dbset.Find(keyValues);
             DeleteAsync(entity);
         }
@@ -179,7 +179,7 @@ namespace EDennis.EFBase {
         /// </summary>
         /// <param name="sql">The FOR JSON SQL to execute</param>
         /// <returns>A JSON string representing the resultset</returns>
-        public string GetJson(string sql) {
+        public virtual string GetJson(string sql) {
 
             //simple guard against SQL Injection
             sql = sql.Replace(";", "").TrimStart();
@@ -209,7 +209,7 @@ namespace EDennis.EFBase {
         /// </summary>
         /// <param name="sql">The FOR JSON SQL to execute</param>
         /// <returns>A JSON string representing the resultset</returns>
-        public async Task<string> GetJsonAsync(string sql) {
+        public virtual async Task<string> GetJsonAsync(string sql) {
 
             //simple guard against SQL Injection
             sql = sql.Replace(";", "").TrimStart();
