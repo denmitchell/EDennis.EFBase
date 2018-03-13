@@ -43,7 +43,7 @@ namespace EDennis.EFBase {
 		'select @NextValue = max([' + c.column_name + ']) + 1 from [' + c.table_name + ']' NextValueSql
 		from INFORMATION_SCHEMA.COLUMNS c
 		inner join INFORMATION_SCHEMA.SEQUENCES s
-			on c.COLUMN_DEFAULT LIKE '%' + s.SEQUENCE_NAME + '%' 
+			on rtrim(replace(replace(replace(replace(c.COLUMN_DEFAULT,'[',''),']',''),')',''),'(','')) LIKE '%next value for%' + s.SEQUENCE_NAME + '%' 
 
 	open crsr
 	while (1=1)
