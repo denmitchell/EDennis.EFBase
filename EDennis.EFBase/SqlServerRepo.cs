@@ -60,6 +60,21 @@ namespace EDennis.EFBase {
             }
         }
 
+
+        /// <summary>
+        /// Constructs a new BaseRepo object for use in testing.
+        /// </summary>
+        /// <param name="context">DbContext subclass that includes
+        /// a DbSet for pure JSON results</param>
+        /// <param name="transaction">use an existing transaction</param>
+        public SqlServerRepo(SqlServerContext context, IDbContextTransaction transaction)
+        {
+            _context = context;
+            _dbset = _context.Set<TEntity>();
+
+            _trans = transaction;
+        }
+
         /// <summary>
         /// Retrieves the entity with the provided primary key values
         /// </summary>
