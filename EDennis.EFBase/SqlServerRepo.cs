@@ -41,6 +41,16 @@ namespace EDennis.EFBase {
         protected bool _autoRollback;
 
         /// <summary>
+        /// Returns the current transaction, if one
+        /// has been specified, or null.
+        /// </summary>
+        public IDbContextTransaction CurrentTransaction {
+            get {
+                return _trans;
+            }
+        }
+
+        /// <summary>
         /// Constructs a new BaseRepo object for use in testing.
         /// </summary>
         /// <param name="context">DbContext subclass that includes
