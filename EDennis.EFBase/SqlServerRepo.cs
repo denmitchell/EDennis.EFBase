@@ -85,6 +85,28 @@ namespace EDennis.EFBase {
             _trans = transaction;
         }
 
+
+        /// <summary>
+        /// Turns on the autorollback feature.  
+        /// This is useful in situations where the repo is
+        /// dependency injected into a class (e.g., a 
+        /// controller) and autorollback depends upon
+        /// logic in that class (e.g., value of 
+        /// IHostingEnvironment)
+        /// 
+        /// Note that any transactions prior to turning on 
+        /// auto rollback will not be rolled back.
+        /// </summary>
+        public void EnableAutoRollback() {
+            _context.Database.AutoTransactionsEnabled = false;
+            _autoRollback = true;
+
+            if (_context.Database.CurrentTransaction == null)
+                _trans = _context.Database.BeginTransaction(
+                    IsolationLevel.Serializable);
+        }
+
+
         /// <summary>
         /// Retrieves the entity with the provided primary key values
         /// </summary>
