@@ -7,9 +7,15 @@ using System.Threading.Tasks;
 
 namespace EDennis.EFBase {
 
-    public interface IBaseRepo<TEntity>
+    public interface ISqlServerRepo<TEntity>
             where TEntity : class {
 
+        IDbContextTransaction CurrentTransaction { get; }
+        void StartTransaction();
+        void Rollback();
+        void EnableAutoRollback();
+        bool Exists(params object[] keyValues);
+        Task<Boolean> ExistsAsync(params object[] keyValues);
         TEntity GetById(object[] keyValues);
         Task<TEntity> GetByIdAsync(object[] keyValues);
         TEntity Create(TEntity entity);
@@ -32,7 +38,7 @@ namespace EDennis.EFBase {
     /// during unit testing by using one of the overloaded constructors
     /// </summary>
     /// <typeparam name="TEntity">The name of the entity</typeparam>
-    public class SqlServerRepo<TEntity> : IBaseRepo<TEntity>, IDisposable
+    public class SqlServerRepo<TEntity> : ISqlServerRepo<TEntity>, IDisposable
                 where TEntity : class, new() {
 
         protected SqlServerContext _context;
@@ -125,6 +131,59 @@ namespace EDennis.EFBase {
         public virtual async Task<TEntity> GetByIdAsync(params object[] keyValues) {
             return await _dbset.FindAsync(keyValues);
         }
+
+
+        /// <summary>
+        /// Determines if an object with the given primary key values
+        /// exists in the context.
+        /// </summary>
+        /// <param name="keyValues">primary key values</param>
+        /// <returns></returns>
+        public async Task<Boolean> ExistsAsync(params object[] keyValues) {
+            var x = await _dbset.FindAsync(keyValues);
+            var exists = (x != null);
+            _context.Entry(x).State = EntityState.Detached;
+            return exists;
+            //return await context.Items.AnyAsync(i => i.ItemId == id);
+        }
+
+
+        /// <summary>
+        /// Determines if an object with the given primary key values
+        /// exists in the context.
+        /// </summary>
+        /// <param name="keyValues">primary key values</param>
+        /// <returns>true if an entity with the provided keys exists</returns>
+        public bool Exists(params object[] keyValues) {
+            var x = _dbset.Find(keyValues);
+            var exists = (x != null);
+            _context.Entry(x).State = EntityState.Detached;
+            return exists;
+        }
+
+        
+        /// <summary>
+        /// Starts a transaction, which can be subsequently rolled back.
+        /// </summary>
+        public void StartTransaction() {
+            _context.Database.AutoTransactionsEnabled = false;
+            if (_context.Database.CurrentTransaction == null)
+                _context.Database.BeginTransaction();
+        }
+
+
+        /// <summary>
+        /// Rolls back the current transaction, and resets all
+        /// sequences.
+        /// </summary>
+        public void Rollback() {
+            if (_context.Database.CurrentTransaction != null) {
+                _context.Database.RollbackTransaction();
+                SequenceResetter.ResetAllSequences(_context);
+            }
+        }
+
+
 
 
         /// <summary>
