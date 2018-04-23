@@ -2,13 +2,13 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
-    <Version>1.2.4</Version>
+    <Version>1.2.5</Version>
     <Description>Provides a SqlServerContext and SqlServerRepo for Entity Framework targeting SQL Server 2016+.  The SqlServerRepo class includes CRUD methods, as well as a method for returning JSON from a FOR JSON SQL Server SELECT statement.  SqlServerRepo supports auto-rollback transactions and sequence resetting for testing scenarios.</Description>
-    <PackageReleaseNotes>Fixed bug with StartTransaction and Rollback methods</PackageReleaseNotes>
+    <PackageReleaseNotes>Fixed bug with ISqlServerRepo</PackageReleaseNotes>
     <PackageTags>Base Repository, Entity Framework, FOR JSON, SQL Server, Transactions, Sequence Resetting</PackageTags>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageIconUrl>https://avatars0.githubusercontent.com/u/2938333?s=400&amp;v=4</PackageIconUrl>
-    <AssemblyVersion>1.2.4.0</AssemblyVersion>
+    <AssemblyVersion>1.2.5.0</AssemblyVersion>
   </PropertyGroup>
 
   <ItemGroup>
