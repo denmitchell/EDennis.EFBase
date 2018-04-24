@@ -16,16 +16,16 @@ namespace EDennis.EFBase {
         void EnableAutoRollback();
         bool Exists(params object[] keyValues);
         Task<Boolean> ExistsAsync(params object[] keyValues);
-        TEntity GetById(object[] keyValues);
-        Task<TEntity> GetByIdAsync(object[] keyValues);
+        TEntity GetById(params object[] keyValues);
+        Task<TEntity> GetByIdAsync(params object[] keyValues);
         TEntity Create(TEntity entity);
         Task<TEntity> CreateAsync(TEntity entity);
         TEntity Update(TEntity entity);
         Task<TEntity> UpdateAsync(TEntity entity);
         void Delete(TEntity entity);
         void DeleteAsync(TEntity entity);
-        void Delete(object[] keyValues);
-        void DeleteAsync(object[] keyValues);
+        void Delete(params object[] keyValues);
+        void DeleteAsync(params object[] keyValues);
         string GetJson(string sql);
         Task<string> GetJsonAsync(string sql);
     }
@@ -83,8 +83,7 @@ namespace EDennis.EFBase {
         /// <param name="context">DbContext subclass that includes
         /// a DbSet for pure JSON results</param>
         /// <param name="transaction">use an existing transaction</param>
-        public SqlServerRepo(SqlServerContext context, IDbContextTransaction transaction)
-        {
+        public SqlServerRepo(SqlServerContext context, IDbContextTransaction transaction) {
             _context = context;
             _dbset = _context.Set<TEntity>();
 
@@ -161,14 +160,15 @@ namespace EDennis.EFBase {
             return exists;
         }
 
-        
+
         /// <summary>
         /// Starts a transaction, which can be subsequently rolled back.
         /// </summary>
         public void StartTransaction() {
             _context.Database.AutoTransactionsEnabled = false;
             if (_context.Database.CurrentTransaction == null)
-                _context.Database.BeginTransaction();
+                _trans = _context.Database.BeginTransaction(
+                    IsolationLevel.Serializable);
         }
 
 
@@ -178,11 +178,27 @@ namespace EDennis.EFBase {
         /// </summary>
         public void Rollback() {
             if (_context.Database.CurrentTransaction != null) {
-                _context.Database.RollbackTransaction();
+                _trans.Rollback();
                 SequenceResetter.ResetAllSequences(_context);
+                _trans.Dispose();
             }
         }
 
+
+        /// <summary>
+        /// Detaches all entities from the ChangeTracker.  This is
+        /// needed for integration testing scenarios in which the
+        /// repo and context are injected as singletons.  In such a
+        /// case, call this after calling Rollback().
+        /// </summary>
+        public void ResetContext() {
+            foreach (var dbEntityEntry in _context.ChangeTracker.Entries()) {
+
+                if (dbEntityEntry.Entity != null) {
+                    dbEntityEntry.State = EntityState.Detached;
+                }
+            }
+        }
 
 
 
