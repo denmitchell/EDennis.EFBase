@@ -23,9 +23,9 @@ namespace EDennis.EFBase {
         TEntity Update(TEntity entity);
         Task<TEntity> UpdateAsync(TEntity entity);
         void Delete(TEntity entity);
-        void DeleteAsync(TEntity entity);
+        Task DeleteAsync(TEntity entity);
         void Delete(params object[] keyValues);
-        void DeleteAsync(params object[] keyValues);
+        Task DeleteAsync(params object[] keyValues);
         string GetJson(string sql);
         Task<string> GetJsonAsync(string sql);
     }
@@ -269,7 +269,7 @@ namespace EDennis.EFBase {
         /// Asychronously deletes the provided entity
         /// </summary>
         /// <param name="entity">The entity to delete</param>
-        public virtual async void DeleteAsync(TEntity entity) {
+        public virtual async Task DeleteAsync(TEntity entity) {
             if (_context.Entry(entity).State == EntityState.Detached) {
                 _dbset.Attach(entity);
             }
@@ -290,9 +290,9 @@ namespace EDennis.EFBase {
         /// Asynchrously deletes the entity whose primary keys match the provided input
         /// </summary>
         /// <param name="keyValues">The primary key as key-value object array</param>
-        public virtual void DeleteAsync(params object[] keyValues) {
+        public virtual async Task DeleteAsync(params object[] keyValues) {
             TEntity entity = _dbset.Find(keyValues);
-            DeleteAsync(entity);
+            await DeleteAsync(entity);
         }
 
         /// <summary>
