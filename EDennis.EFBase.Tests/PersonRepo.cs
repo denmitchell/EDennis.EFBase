@@ -33,7 +33,6 @@ namespace EDennis.EFBase.Tests {
             return query.ToList();
         }
 
-
     }
 
 

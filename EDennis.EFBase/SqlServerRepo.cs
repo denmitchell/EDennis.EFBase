@@ -208,6 +208,10 @@ namespace EDennis.EFBase {
         /// <param name="entity">The entity to create</param>
         /// <returns>The created entity</returns>
         public virtual TEntity Create(TEntity entity) {
+            if (entity == null)
+                throw new MissingEntityException(
+                    $"Cannot create a null {entity.GetType().Name}");
+
             _dbset.Add(entity);
             _context.SaveChanges();
             return entity;
@@ -220,6 +224,10 @@ namespace EDennis.EFBase {
         /// <param name="entity">The entity to create</param>
         /// <returns>The created entity</returns>
         public virtual async Task<TEntity> CreateAsync(TEntity entity) {
+            if (entity == null)
+                throw new MissingEntityException(
+                    $"Cannot create a null {entity.GetType().Name}");
+
             _dbset.Add(entity);
             await _context.SaveChangesAsync();
             return entity;
@@ -232,6 +240,10 @@ namespace EDennis.EFBase {
         /// <param name="entity">The new data for the entity</param>
         /// <returns>The newly updated entity</returns>
         public virtual TEntity Update(TEntity entity) {
+            if (entity == null)
+                throw new MissingEntityException(
+                    $"Cannot update a null {entity.GetType().Name}");
+
             _context.Attach(entity);
             _context.Entry(entity).State = EntityState.Modified;
             _context.SaveChanges();
@@ -246,6 +258,11 @@ namespace EDennis.EFBase {
         /// <param name="entity">The new data for the entity</param>
         /// <returns>The newly updated entity</returns>
         public virtual async Task<TEntity> UpdateAsync(TEntity entity) {
+
+            if (entity == null)
+                throw new MissingEntityException(
+                    $"Cannot update a null {entity.GetType().Name}");
+
             _context.Attach(entity);
             _context.Entry(entity).State = EntityState.Modified;
             await _context.SaveChangesAsync();
@@ -258,9 +275,13 @@ namespace EDennis.EFBase {
         /// </summary>
         /// <param name="entity">The entity to delete</param>
         public virtual void Delete(TEntity entity) {
-            if (_context.Entry(entity).State == EntityState.Detached) {
+            if (entity == null)
+                throw new MissingEntityException(
+                    $"Cannot delete a null {entity.GetType().Name}");
+
+            if (_context.Entry(entity).State == EntityState.Detached)
                 _dbset.Attach(entity);
-            }
+
             _dbset.Remove(entity);
             _context.SaveChanges();
         }
@@ -270,9 +291,13 @@ namespace EDennis.EFBase {
         /// </summary>
         /// <param name="entity">The entity to delete</param>
         public virtual async Task DeleteAsync(TEntity entity) {
-            if (_context.Entry(entity).State == EntityState.Detached) {
+            if (entity == null)
+                throw new MissingEntityException(
+                    $"Cannot delete a null {entity.GetType().Name}");
+
+            if (_context.Entry(entity).State == EntityState.Detached)
                 _dbset.Attach(entity);
-            }
+
             _dbset.Remove(entity);
             await _context.SaveChangesAsync();
         }
@@ -283,6 +308,10 @@ namespace EDennis.EFBase {
         /// <param name="keyValues">The primary key as key-value object array</param>
         public virtual void Delete(params object[] keyValues) {
             TEntity entity = _dbset.Find(keyValues);
+            if (entity == null)
+                throw new MissingEntityException(
+                    $"Cannot find {new TEntity().GetType().Name} object with key value = {PrintKeys(keyValues)}");
+
             Delete(entity);
         }
 
@@ -292,6 +321,10 @@ namespace EDennis.EFBase {
         /// <param name="keyValues">The primary key as key-value object array</param>
         public virtual async Task DeleteAsync(params object[] keyValues) {
             TEntity entity = _dbset.Find(keyValues);
+            if (entity == null)
+                throw new MissingEntityException(
+                    $"Cannot find {new TEntity().GetType().Name} object with key value = {PrintKeys(keyValues)}");
+
             await DeleteAsync(entity);
         }
 
@@ -374,6 +407,10 @@ namespace EDennis.EFBase {
                 SequenceResetter.ResetAllSequences(_context);
                 _trans.Dispose();
             }
+        }
+
+        private string PrintKeys(params object[] keyValues) {
+            return "[" + String.Join(",", keyValues) + "]";
         }
 
 
