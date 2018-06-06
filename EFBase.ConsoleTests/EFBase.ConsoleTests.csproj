@@ -2,14 +2,14 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
     <!-- NEEDED FOR DATABASE MIGRATIONS -->
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="EDennis.MigrationsExtensions" Version="1.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.5" />
+    <PackageReference Include="EDennis.MigrationsExtensions" Version="1.3.0" />
+    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.1.0" />
   </ItemGroup>
 
   <ItemGroup>

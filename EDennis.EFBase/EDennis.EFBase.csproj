@@ -1,20 +1,20 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.0</TargetFramework>
-    <Version>1.2.8</Version>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <Version>1.3.0</Version>
     <Description>Provides a SqlServerContext and SqlServerRepo for Entity Framework targeting SQL Server 2016+.  The SqlServerRepo class includes CRUD methods, as well as a method for returning JSON from a FOR JSON SQL Server SELECT statement.  SqlServerRepo supports auto-rollback transactions and sequence resetting for testing scenarios.</Description>
-    <PackageReleaseNotes>Added MissingEntityException for Create, Update, and Delete methods</PackageReleaseNotes>
+    <PackageReleaseNotes>Targets .NET Core 2.1 and uses a DbQuery, instead of a DbSet, for SqlJson handling</PackageReleaseNotes>
     <PackageTags>Base Repository, Entity Framework, FOR JSON, SQL Server, Transactions, Sequence Resetting</PackageTags>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageIconUrl>https://avatars0.githubusercontent.com/u/2938333?s=400&amp;v=4</PackageIconUrl>
-    <AssemblyVersion>1.2.8.0</AssemblyVersion>
-    <FileVersion>1.2.8.0</FileVersion>
+    <AssemblyVersion>1.3.0.0</AssemblyVersion>
+    <FileVersion>1.3.0.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.5" />
-    <PackageReference Include="Microsoft.SqlServer.SqlManagementObjects" Version="140.17218.0" />
+    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.1.0" />
+    <PackageReference Include="Microsoft.SqlServer.SqlManagementObjects" Version="140.17265.0" />
   </ItemGroup>
   
 </Project>

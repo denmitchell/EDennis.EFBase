@@ -26,7 +26,7 @@ namespace EDennis.EFBase {
 
 
         //holds FOR JSON result sets
-        public virtual DbSet<SqlJson> SqlJsonResult { get; set; }
+        public virtual DbQuery<SqlJson> SqlJsonResult { get; set; }
 
     }
 }
