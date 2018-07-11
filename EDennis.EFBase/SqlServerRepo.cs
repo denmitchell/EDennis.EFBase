@@ -192,12 +192,16 @@ namespace EDennis.EFBase {
         /// case, call this after calling Rollback().
         /// </summary>
         public void ResetContext() {
-            foreach (var dbEntityEntry in _context.ChangeTracker.Entries()) {
 
+            if (_context?.ChangeTracker?.Entries() == null)
+                return;
+
+            foreach (var dbEntityEntry in _context.ChangeTracker.Entries()) {
                 if (dbEntityEntry.Entity != null) {
                     dbEntityEntry.State = EntityState.Detached;
                 }
             }
+
         }
 
 
