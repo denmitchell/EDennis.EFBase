@@ -1,8 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace EDennis.EFBase {
@@ -130,6 +132,37 @@ namespace EDennis.EFBase {
         public virtual async Task<TEntity> GetByIdAsync(params object[] keyValues) {
             return await _dbset.FindAsync(keyValues);
         }
+
+
+        /// <summary>
+        /// Retrieves a page of all records defined by the provided LINQ expression
+        /// </summary>
+        /// <param name="linqExpression">Valid LINQ expression</param>
+        /// <param name="pageNumber">The target result page</param>
+        /// <param name="pageSize">The number of record per page</param>
+        /// <returns>A list of all TEntity objects</returns>
+        public virtual List<TEntity> GetByLinq(Expression<Func<TEntity,bool>> linqExpression, int pageNumber, int pageSize) {
+            return _dbset.Where(linqExpression)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+        }
+
+
+        /// <summary>
+        /// Asynchronously retrieves a page of all records defined by the provided LINQ expression.
+        /// </summary>
+        /// <param name="linqExpression">Valid LINQ expression</param>
+        /// <param name="pageNumber">The target result page</param>
+        /// <param name="pageSize">The number of record per page</param>
+        /// <returns>A list of all TEntity objects</returns>
+        public virtual async Task<List<TEntity>> GetByLinqAsync(Expression<Func<TEntity, bool>> linqExpression, int pageNumber, int pageSize) {
+            return await _dbset.Where(linqExpression)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+        }
+
 
 
         /// <summary>

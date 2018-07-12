@@ -26,5 +26,19 @@ namespace EDennis.EFBase.Tests {
             }
         }
 
+        [Fact]
+        public void GetByLinq() {
+            using (var repo = new PersonRepo(context, true)) {
+
+                repo.Create(new Person { LastName = "Davis", FirstName = "Jane" });
+                repo.Create(new Person { LastName = "Davis", FirstName = "John" });
+                repo.Create(new Person { LastName = "Jones", FirstName = "Bob" });
+
+                var actual = repo.GetByLinq(p => p.LastName == "Davis",1,2);
+                Assert.Equal(2, actual.Count);
+            }
+        }
+
+
     }
 }
