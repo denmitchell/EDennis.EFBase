@@ -193,10 +193,7 @@ namespace EDennis.EFBase {
         /// </summary>
         public void ResetContext() {
 
-            if (_context?.ChangeTracker?.Entries() == null)
-                return;
-
-            foreach (var dbEntityEntry in _context.ChangeTracker.Entries()) {
+            foreach (var dbEntityEntry in _context.ChangeTracker.Entries().ToList()) {
                 if (dbEntityEntry.Entity != null) {
                     dbEntityEntry.State = EntityState.Detached;
                 }
