@@ -9,13 +9,10 @@ using System.Threading.Tasks;
 
 namespace EDennis.EFBase {
 
-    public interface ISqlServerRepo<TEntity>
-            where TEntity : class {
+    public interface ISqlRepo<TEntity,TContext>
+            where TEntity : class, new()
+            where TContext : DbContext, new() {
 
-        IDbContextTransaction CurrentTransaction { get; }
-        void StartTransaction();
-        void Rollback();
-        void EnableAutoRollback();
         bool Exists(params object[] keyValues);
         Task<Boolean> ExistsAsync(params object[] keyValues);
         TEntity GetById(params object[] keyValues);
@@ -28,8 +25,6 @@ namespace EDennis.EFBase {
         Task DeleteAsync(TEntity entity);
         void Delete(params object[] keyValues);
         Task DeleteAsync(params object[] keyValues);
-        string GetJson(string sql);
-        Task<string> GetJsonAsync(string sql);
     }
 
     /// <summary>
@@ -40,77 +35,53 @@ namespace EDennis.EFBase {
     /// during unit testing by using one of the overloaded constructors
     /// </summary>
     /// <typeparam name="TEntity">The name of the entity</typeparam>
-    public class SqlServerRepo<TEntity> : ISqlServerRepo<TEntity>, IDisposable
-                where TEntity : class, new() {
+    public class SqlRepo<TEntity,TContext> : ISqlRepo<TEntity,TContext>
+            where TEntity : class, new()
+            where TContext : DbContext, new(){
 
-        protected SqlServerContext _context;
+        protected TContext Context { get; }
         protected DbSet<TEntity> _dbset;
-        protected IDbContextTransaction _trans;
-        protected bool _autoRollback;
+        protected TestingTransaction<TContext> Transaction { get; }
+
 
         /// <summary>
-        /// Returns the current transaction, if one
-        /// has been specified, or null.
+        /// Constructs a new SqlRepo object using the provided DbContext
+        /// and the built-in (default) transaction handling
         /// </summary>
-        public IDbContextTransaction CurrentTransaction {
-            get {
-                return _trans;
-            }
-        }
+        /// <param name="context">Entity Framework DbContext</param>
+        public SqlRepo(TContext context) {
+            Context = context;
 
-        /// <summary>
-        /// Constructs a new BaseRepo object for use in testing.
-        /// </summary>
-        /// <param name="context">DbContext subclass that includes
-        /// a DbSet for pure JSON results</param>
-        /// <param name="autoRollback">specify as true to include
-        /// autoRollback</param>
-        public SqlServerRepo(SqlServerContext context, bool autoRollback = false) {
-            _context = context;
-            _dbset = _context.Set<TEntity>();
-
-            if (autoRollback) {
-                _context.Database.AutoTransactionsEnabled = false;
-                _autoRollback = autoRollback;
-
-                _trans = _context.Database.BeginTransaction(
-                    IsolationLevel.Serializable);
-            }
+            //attach context to transaction, when appropriate
+            _dbset = Context.Set<TEntity>();
         }
 
 
-        /// <summary>
-        /// Constructs a new BaseRepo object for use in testing.
-        /// </summary>
-        /// <param name="context">DbContext subclass that includes
-        /// a DbSet for pure JSON results</param>
-        /// <param name="transaction">use an existing transaction</param>
-        public SqlServerRepo(SqlServerContext context, IDbContextTransaction transaction) {
-            _context = context;
-            _dbset = _context.Set<TEntity>();
 
-            _trans = transaction;
+        /// <summary>
+        /// Constructs a new SqlRepo object using the provided DbContext and DbTransaction
+        /// </summary>
+        /// <param name="context">Entity Framework DbContext</param>
+        /// <param name="trans">Subclass of DbTransaction that rolls back on Dispose (may be null)</param>
+        public SqlRepo(TContext context, TestingTransaction<TContext> trans) {
+            Transaction = trans;
+            Context = context;
+
+            //attach context to transaction, when appropriate
+            if (trans != null && trans.Context != context
+                && trans.TransactionState == TransactionState.Begun)
+                    trans.AttachContext(context);
+
+            _dbset = Context.Set<TEntity>();
         }
 
 
         /// <summary>
-        /// Turns on the autorollback feature.  
-        /// This is useful in situations where the repo is
-        /// dependency injected into a class (e.g., a 
-        /// controller) and autorollback depends upon
-        /// logic in that class (e.g., value of 
-        /// IHostingEnvironment)
-        /// 
-        /// Note that any transactions prior to turning on 
-        /// auto rollback will not be rolled back.
+        /// Restarts a transaction, if a transaction is not null
         /// </summary>
-        public void EnableAutoRollback() {
-            _context.Database.AutoTransactionsEnabled = false;
-            _autoRollback = true;
-
-            if (_context.Database.CurrentTransaction == null)
-                _trans = _context.Database.BeginTransaction(
-                    IsolationLevel.Serializable);
+        public void RestartTransaction() {
+            if(Transaction != null)
+                Transaction.Restart();
         }
 
 
@@ -174,7 +145,7 @@ namespace EDennis.EFBase {
         public async Task<Boolean> ExistsAsync(params object[] keyValues) {
             var x = await _dbset.FindAsync(keyValues);
             var exists = (x != null);
-            _context.Entry(x).State = EntityState.Detached;
+            Context.Entry(x).State = EntityState.Detached;
             return exists;
             //return await context.Items.AnyAsync(i => i.ItemId == id);
         }
@@ -189,50 +160,12 @@ namespace EDennis.EFBase {
         public bool Exists(params object[] keyValues) {
             var x = _dbset.Find(keyValues);
             var exists = (x != null);
-            _context.Entry(x).State = EntityState.Detached;
+            Context.Entry(x).State = EntityState.Detached;
             return exists;
         }
 
 
-        /// <summary>
-        /// Starts a transaction, which can be subsequently rolled back.
-        /// </summary>
-        public void StartTransaction() {
-            _context.Database.AutoTransactionsEnabled = false;
-            if (_context.Database.CurrentTransaction == null)
-                _trans = _context.Database.BeginTransaction(
-                    IsolationLevel.Serializable);
-        }
 
-
-        /// <summary>
-        /// Rolls back the current transaction, and resets all
-        /// sequences.
-        /// </summary>
-        public void Rollback() {
-            if (_context.Database.CurrentTransaction != null) {
-                _trans.Rollback();
-                SequenceResetter.ResetAllSequences(_context);
-                _trans.Dispose();
-            }
-        }
-
-
-        /// <summary>
-        /// Detaches all entities from the ChangeTracker.  This is
-        /// needed for integration testing scenarios in which the
-        /// repo and context are injected as singletons.  In such a
-        /// case, call this after calling Rollback().
-        /// </summary>
-        public void ResetContext() {
-
-            foreach (var dbEntityEntry in _context.ChangeTracker.Entries().ToList()) {
-                if (dbEntityEntry.Entity != null) {
-                    dbEntityEntry.State = EntityState.Detached;
-                }
-            }
-
-        }
 
 
 
@@ -247,7 +180,7 @@ namespace EDennis.EFBase {
                     $"Cannot create a null {entity.GetType().Name}");
 
             _dbset.Add(entity);
-            _context.SaveChanges();
+            Context.SaveChanges();
             return entity;
         }
 
@@ -263,7 +196,7 @@ namespace EDennis.EFBase {
                     $"Cannot create a null {entity.GetType().Name}");
 
             _dbset.Add(entity);
-            await _context.SaveChangesAsync();
+            await Context.SaveChangesAsync();
             return entity;
         }
 
@@ -278,9 +211,9 @@ namespace EDennis.EFBase {
                 throw new MissingEntityException(
                     $"Cannot update a null {entity.GetType().Name}");
 
-            _context.Attach(entity);
-            _context.Entry(entity).State = EntityState.Modified;
-            _context.SaveChanges();
+            Context.Attach(entity);
+            Context.Entry(entity).State = EntityState.Modified;
+            Context.SaveChanges();
 
             return entity;
         }
@@ -297,9 +230,9 @@ namespace EDennis.EFBase {
                 throw new MissingEntityException(
                     $"Cannot update a null {entity.GetType().Name}");
 
-            _context.Attach(entity);
-            _context.Entry(entity).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
+            Context.Attach(entity);
+            Context.Entry(entity).State = EntityState.Modified;
+            await Context.SaveChangesAsync();
 
             return entity;
         }
@@ -313,11 +246,11 @@ namespace EDennis.EFBase {
                 throw new MissingEntityException(
                     $"Cannot delete a null {entity.GetType().Name}");
 
-            if (_context.Entry(entity).State == EntityState.Detached)
+            if (Context.Entry(entity).State == EntityState.Detached)
                 _dbset.Attach(entity);
 
             _dbset.Remove(entity);
-            _context.SaveChanges();
+            Context.SaveChanges();
         }
 
         /// <summary>
@@ -329,11 +262,11 @@ namespace EDennis.EFBase {
                 throw new MissingEntityException(
                     $"Cannot delete a null {entity.GetType().Name}");
 
-            if (_context.Entry(entity).State == EntityState.Detached)
+            if (Context.Entry(entity).State == EntityState.Detached)
                 _dbset.Attach(entity);
 
             _dbset.Remove(entity);
-            await _context.SaveChangesAsync();
+            await Context.SaveChangesAsync();
         }
 
         /// <summary>
@@ -362,90 +295,10 @@ namespace EDennis.EFBase {
             await DeleteAsync(entity);
         }
 
-        /// <summary>
-        /// Executes a FOR JSON SELECT statement and returns the result as
-        /// a string.
-        /// </summary>
-        /// <param name="sql">The FOR JSON SQL to execute</param>
-        /// <returns>A JSON string representing the resultset</returns>
-        public virtual string GetJson(string sql) {
-
-            //simple guard against SQL Injection
-            sql = sql.Replace(";", "").TrimStart();
-
-            //simple guard against SQL Injection
-            if (sql.Substring(0, 6).ToUpper() != "SELECT")
-                throw new FormatException("GetJson SQL must begin with SELECT");
-
-            //wraps FOR JSON SELECT statement such that results are conveyed as a column named "json"
-            sql = "declare @j varchar(max) = (" + sql + "); select @j json;";
-
-            //use LINQ to get the results
-            var result = _context.SqlJsonResult
-                    .AsNoTracking()
-                    .FromSql(sql)
-                    .FirstOrDefault()
-                    .Json;
-
-            //return the results
-            return result;
-        }
-
-
-        /// <summary>
-        /// Executes a FOR JSON SELECT statement and returns the result as
-        /// a string.
-        /// </summary>
-        /// <param name="sql">The FOR JSON SQL to execute</param>
-        /// <returns>A JSON string representing the resultset</returns>
-        public virtual async Task<string> GetJsonAsync(string sql) {
-
-            //simple guard against SQL Injection
-            sql = sql.Replace(";", "").TrimStart();
-
-            //simple guard against SQL Injection
-            if (sql.Substring(0, 6).ToUpper() != "SELECT")
-                throw new FormatException("GetJson SQL must begin with SELECT");
-
-            //wraps FOR JSON SELECT statement such that results are conveyed as a column named "json"
-            sql = "declare @j varchar(max) = (" + sql + "); select @j json;";
-
-            //use LINQ to get the results
-            var result = await _context.SqlJsonResult
-                    .AsNoTracking()
-                    .FromSql(sql)
-                    .FirstOrDefaultAsync();
-
-            //return the results
-            return result.Json;
-        }
-
-        /// <summary>
-        /// Disposes of the Repository
-        /// </summary>
-        public void Dispose() {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        /// <summary>
-        /// Disposes of the Repository, calling Rollback and
-        /// resetting sequences, if indicated
-        /// </summary>
-        /// <param name="disposing">whether object is disposing</param>
-        protected virtual void Dispose(bool disposing) {
-            if (disposing && _autoRollback &&
-                (_context.Database.GetDbConnection() != null)
-                && _context.Database.CurrentTransaction != null) {
-                _trans.Rollback();
-                SequenceResetter.ResetAllSequences(_context);
-                _trans.Dispose();
-            }
-        }
-
         private string PrintKeys(params object[] keyValues) {
             return "[" + String.Join(",", keyValues) + "]";
         }
+
 
 
     }

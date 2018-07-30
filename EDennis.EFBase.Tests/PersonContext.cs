@@ -3,10 +3,17 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace EDennis.EFBase.Tests {
-    public partial class PersonContext : SqlServerContext {
+    public partial class PersonContext : DbContext {
 
+        public PersonContext() {
+        }
+
+        public PersonContext(DbContextOptions<DbContext> options) 
+            : base(options) {}
 
         public virtual DbSet<Person> Person { get; set; }
+
+        
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
             if (!optionsBuilder.IsConfigured) {

@@ -2,14 +2,14 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
-    <Version>1.3.4</Version>
-    <Description>Provides a SqlServerContext and SqlServerRepo for Entity Framework targeting SQL Server 2016+.  The SqlServerRepo class includes CRUD methods, as well as a method for returning JSON from a FOR JSON SQL Server SELECT statement.  SqlServerRepo supports auto-rollback transactions and sequence resetting for testing scenarios.</Description>
-    <PackageReleaseNotes>Updated to Microsoft.AspNetCore.All 2.1.2</PackageReleaseNotes>
-    <PackageTags>Base Repository, Entity Framework, FOR JSON, SQL Server, Transactions, Sequence Resetting</PackageTags>
+    <Version>2.1.6</Version>
+    <Description>Provides a SqlContext and SqlRepo for Entity Framework targeting SQL Server 2016+.  The SqlRepo class includes various CRUD methods, including methods that take a LINQ expression for filtering records.  SqlRepo supports auto-rollback transactions and sequence resetting for testing scenarios.</Description>
+    <PackageReleaseNotes>Widescale breaking changes in this version.  Classes were renamed to emphasize breaking changes.  Transaction functionality is now supported by a TestingTransaction class.  The SqlRepo class now takes a DbContext object, as well as an optional TestingTransaction object.</PackageReleaseNotes>
+    <PackageTags>Base Repository, Entity Framework, SQL Server, Transactions, Sequence Resetting</PackageTags>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageIconUrl>https://avatars0.githubusercontent.com/u/2938333?s=400&amp;v=4</PackageIconUrl>
-    <AssemblyVersion>1.3.4.0</AssemblyVersion>
-    <FileVersion>1.3.4.0</FileVersion>
+    <AssemblyVersion>2.1.6.0</AssemblyVersion>
+    <FileVersion>2.1.6.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>

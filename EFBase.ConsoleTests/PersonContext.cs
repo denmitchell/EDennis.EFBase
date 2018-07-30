@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace EDennis.EFBase.ConsoleAppTest {
 
 
-    public partial class PersonContext : SqlServerContext {
+    public partial class PersonContext : DbContext {
 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {

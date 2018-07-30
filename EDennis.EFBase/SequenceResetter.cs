@@ -28,6 +28,11 @@ namespace EDennis.EFBase {
             SqlExecutor.Execute(context, sql);
         }
 
+        public static void ResetAllSequences(string connectionString) {
+            SqlExecutor.Execute(connectionString, sql);
+        }
+
+
         private static string sql =
 @"
 	declare @SequenceName varchar(255), @TableName nvarchar(255), @ColumnName nvarchar(255)

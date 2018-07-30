@@ -10,12 +10,11 @@ using System.Data;
 
 namespace EDennis.EFBase.Tests {
 
-    public class PersonRepo : SqlServerRepo<Person> {
+    public class PersonRepo : SqlRepo<Person,PersonContext> {
 
 
-        public PersonRepo(PersonContext context, bool autoRollback = false) :
-            base(context, autoRollback){}
-
+        public PersonRepo(PersonContext context, TestingTransaction<PersonContext> trans) :
+            base(context, trans) { }
 
         public void ThrowException() {
             throw new Exception("To see if rollback still occurs");
