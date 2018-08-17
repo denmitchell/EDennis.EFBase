@@ -5,3 +5,4 @@ The EFBase package provides a SqlRepo for Entity Framework targeting SQL Server 
 3. **[SequenceResetter](https://github.com/denmitchell/efbase/wiki/SequenceResetter)**-- which provides a method for resetting all sequences in a database.
 4. **[SqlExecutor](https://github.com/denmitchell/efbase/wiki/SqlExecutor)** -- which provides methods for executing multiple SQL statement blocks separated by GO.
 5. **[UnitTestBase](https://github.com/denmitchell/efbase/wiki/UnitTestBase)** -- which provides a base class that allows Xunit tests that use SqlRepo and TestingTransaction to automatically roll back after each test case. 
+6. **[IntegrationTestBase](https://github.com/denmitchell/efbase/wiki/IntegrationTestBase)** -- which which is like the UnitTestBase class, but which does not autorollback on Dispose(). 
