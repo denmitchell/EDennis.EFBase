@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <Version>2.1.9</Version>
-    <Description>Provides a SqlContext and SqlRepo for Entity Framework targeting SQL Server 2016+.  The SqlRepo class includes various CRUD methods, including methods that take a LINQ expression for filtering records.  SqlRepo supports auto-rollback transactions and sequence resetting for testing scenarios.</Description>
+    <Description>Provides a SqlRepo for Entity Framework targeting SQL Server 2016+.  The SqlRepo class includes various CRUD methods, including methods that take a LINQ expression for filtering records.  SqlRepo supports auto-rollback transactions and sequence resetting for testing scenarios.</Description>
     <PackageReleaseNotes>Upgraded to Microsoft.AspNetCore.App Version 2.1.5</PackageReleaseNotes>
     <PackageTags>Base Repository, Entity Framework, SQL Server, Transactions, Sequence Resetting</PackageTags>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -13,9 +13,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="EDennis.MigrationsExtensions" Version="1.6.0" />
     <PackageReference Include="Microsoft.AspNetCore.App" Version="2.1.5" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />
     <PackageReference Include="Microsoft.SqlServer.SqlManagementObjects" Version="140.17283.0" />
   </ItemGroup>
   
