@@ -4,15 +4,15 @@
     <!--<OutputType>Exe</OutputType>-->
     <GenerateProgramFile>false</GenerateProgramFile>
 
-    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
     <!-- NEEDED FOR DATABASE MIGRATIONS -->
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="EDennis.MigrationsExtensions" Version="1.6.0" />
-    <PackageReference Include="EDennis.NetCoreTestingUtilities" Version="3.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.App" Version="2.1.5" />
+    <PackageReference Include="EDennis.MigrationsExtensions" Version="1.8.0" />
+    <PackageReference Include="EDennis.NetCoreTestingUtilities" Version="3.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.App" Version="2.2.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />
   </ItemGroup>
 
